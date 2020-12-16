@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinosig.suntrtc.dao.VideoCallEventsMapper">
+
+    <resultMap id="BaseResultMap" type="com.sinosig.suntrtc.entity.EventInfo">
+        <result column="business_no" property="businessNo" jdbcType="VARCHAR"/>
+        <result column="event_type" property="eventType" jdbcType="VARCHAR" />
+        <result column="event_owner" property="eventOwner" jdbcType="VARCHAR"/>
+        <result column="event_timestamp" property="eventTimestamp" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+         business_no, event_type, event_owner, event_timestamp, create_time, update_time
+  </sql>
+
+    <select id="selectEventInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+            <include refid="Base_Column_List" />
+        from ygbx_video_call_events
+        where 1=1
+        <if test="businessNo != null">
+          and   business_no = #{businessNo,jdbcType=VARCHAR}
+        </if>
+        <if test="username != null">
+          and  event_owner = #{username,jdbcType=VARCHAR}
+        </if>
+        <if test="eventType != null">
+          and  event_type = #{eventType,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
+</mapper>

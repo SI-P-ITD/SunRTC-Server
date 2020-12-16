@@ -1,0 +1,29 @@
+#配置服务器信息
+server:
+  port: 8087
+  servlet:
+    context-path: /sunRTC
+spring:
+  servlet:
+    multipart:
+      max-file-size: 2000MB
+      max-request-size: 2000MB
+      enabled: true
+  profiles:
+    active: suntrtc
+mybatis:
+  type-aliases-package: com.sinosig.videoSampling.entity
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+logging:
+  level:
+    com.sinosig.sunRTC.dao: info
+    com.sinosig.videoSampling.dao: debug
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%thread]){faint} %clr(%-40.40logger{39}){cyan}:%L %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+
+EXPIRE: 60 * 60 * 24 * 7
+
+sendmsg: https://console.tim.qq.com/v4/openim/sendmsg
+batchsendmsg: https://console.tim.qq.com/v4/openim/batchsendmsg
+
+

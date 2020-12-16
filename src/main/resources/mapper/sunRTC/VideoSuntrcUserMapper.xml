@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosig.suntrtc.dao.VideoSuntrcUserMapper">
+  <resultMap id="BaseResultMap" type="com.sinosig.suntrtc.entity.VideoSuntrcUser">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="USERCODE" jdbcType="VARCHAR" property="usercode" />
+    <result column="SOURCE" jdbcType="VARCHAR" property="source" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, USERCODE, "SOURCE", "STATUS", CREATE_TIME, UPDATE_TIME
+  </sql>
+
+  <select id="selectByOne"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ygbx_video_suntrc_user
+    <where>
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="usercode != null">
+        and USERCODE = #{usercode}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectUserList"  parameterType="java.lang.String" resultType="com.sinosig.suntrtc.entity.VideoSuntrcUser" >
+      SELECT
+        <include refid="Base_Column_List" />
+      from ygbx_video_suntrc_user
+    <where>
+      <if test="username != null and username != ''">
+        and USERCODE != #{username}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ygbx_video_suntrc_user
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.sinosig.suntrtc.entity.VideoSuntrcUser">
+    insert into ygbx_video_suntrc_user (ID, USERCODE, "SOURCE",
+      "STATUS", CREATE_TIME, UPDATE_TIME
+      )
+    values (#{id,jdbcType=VARCHAR}, #{usercode,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, NOW(), NOW()
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.sinosig.suntrtc.entity.VideoSuntrcUser">
+    insert into ygbx_video_suntrc_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="usercode != null">
+        USERCODE,
+      </if>
+      <if test="source != null">
+        "SOURCE",
+      </if>
+      <if test="status != null">
+        "STATUS",
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null">
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinosig.suntrtc.entity.VideoSuntrcUser">
+    update ygbx_video_suntrc_user
+    <set>
+      <if test="usercode != null">
+        USERCODE = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        "SOURCE" = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        "STATUS" = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinosig.suntrtc.entity.VideoSuntrcUser">
+    update ygbx_video_suntrc_user
+    set USERCODE = #{usercode,jdbcType=VARCHAR},
+      "SOURCE" = #{source,jdbcType=VARCHAR},
+      "STATUS" = #{status,jdbcType=VARCHAR},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

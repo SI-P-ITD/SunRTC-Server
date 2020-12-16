@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinosig.suntrtc.dao.CommonParameterMapper" >
+  <resultMap id="BaseResultMap" type="com.sinosig.suntrtc.entity.CommonParameter" >
+    <result column="param_code" property="paramCode" jdbcType="VARCHAR" />
+    <result column="param_value" property="paramValue" jdbcType="VARCHAR" />
+    <result column="param_name" property="paramName" jdbcType="VARCHAR" />
+    <result column="param_chinese_name" property="paramChineseName" jdbcType="VARCHAR" />
+    <result column="param_type_code" property="paramTypeCode" jdbcType="VARCHAR" />
+    <result column="param_type_name" property="paramTypeName" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectCommonParameter" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+      param_code,param_value,param_name,param_type_code
+    from ygbx_common_parameter
+    where
+      param_type_code= #{paramTypeCode,jdbcType=VARCHAR}
+      <if test="paramCode != null" >
+        and param_code= #{paramCode,jdbcType=VARCHAR}
+      </if>
+      <if test="paramValue != null" >
+        and param_value= #{paramValue,jdbcType=VARCHAR}
+      </if>
+  </select>
+</mapper>

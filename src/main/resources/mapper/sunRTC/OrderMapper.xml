@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinosig.suntrtc.dao.OrderDao">
+    <sql id="ordeinfoBean">
+        id
+        as
+        id
+        ,
+        order_id
+        as
+        orderId,
+        surveyor_name
+        as
+        surveyorName,
+        room_no
+        as
+        roomNo,
+        create_user
+        as
+        createUser,
+        phone
+        as
+        phone,
+        damage_address
+        as
+        damageAddress,
+        link,
+        estimateNo
+    </sql>
+    <select id="selectOrderInfoByBusinessNo" resultType="com.sinosig.suntrtc.entity.OrderInfo">
+        select
+        <include refid="ordeinfoBean"/>
+        from ygbx_video_call_order_info
+        where
+        room_no = (
+        select room_no from ygbx_video_call_business where business_no = #{businessNo}
+        )
+    </select>
+</mapper>

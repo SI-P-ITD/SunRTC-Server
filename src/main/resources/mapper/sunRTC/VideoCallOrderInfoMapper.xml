@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinosig.suntrtc.dao.VideoCallOrderInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.sinosig.suntrtc.entity.VideoCallOrderInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="surveyor_name" jdbcType="VARCHAR" property="surveyorName" />
+    <result column="room_no" property="roomNo" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+    <result column="estimateno" property="estimateNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_id, surveyor_name,room_no, create_user, create_time, update_time,link,estimateno
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ygbx_video_call_order_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByRoomNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from ygbx_video_call_order_info
+    where room_no = #{roomNo,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ygbx_video_call_order_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sinosig.suntrtc.entity.VideoCallOrderInfo" >
+    insert into ygbx_video_call_order_info (id, order_id,surveyor_name, room_no,
+      create_user, create_time, update_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{surveyorName,jdbcType=VARCHAR}, #{roomNo,jdbcType=VARCHAR},
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinosig.suntrtc.entity.VideoCallOrderInfo" >
+    insert into ygbx_video_call_order_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="surveyorName != null">
+        surveyor_name,
+      </if>
+      <if test="roomNo != null" >
+        room_no,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="surveyorName != null">
+        #{surveyorName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomNo != null" >
+        #{roomNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinosig.suntrtc.entity.VideoCallOrderInfo" >
+    update ygbx_video_call_order_info
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="surveyorName != null">
+        surveyor_name = #{surveyorName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomNo != null" >
+        room_no = #{roomNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinosig.suntrtc.entity.VideoCallOrderInfo" >
+    update ygbx_video_call_order_info
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      surveyor_name = #{surveyorName,jdbcType=VARCHAR},
+      room_no = #{roomNo,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

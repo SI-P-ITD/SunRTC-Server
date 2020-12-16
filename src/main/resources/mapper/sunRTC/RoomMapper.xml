@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinosig.suntrtc.dao.RoomDao">
+
+    <insert id="createRoom" keyProperty="roomNo" keyColumn="room_no" useGeneratedKeys="true">
+        insert into ygbx_video_call_room (room_no, need_password, password, status, create_user, create_source, create_time,
+        update_time)
+        values (null, #{needPassword,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR},
+        #{createUser,jdbcType=VARCHAR}, #{createSource,jdbcType=VARCHAR},NOW(), null)
+    </insert>
+
+    <select id="getRoomList" resultType="com.sinosig.suntrtc.entity.RoomInfo">
+        select room_no as roomNo,
+        current_business_no as currentBusinessNo,
+        need_password as needPassword,
+        null as password,
+        status,
+        create_user as createUser,
+        create_source as createSource,
+        create_time as createTime,
+        update_time as updateTime
+        from
+        (select a.*,rownum row_num from
+        (select * from ygbx_video_call_room t
+        <where>
+            <if test="createUser != null and createUser != ''">
+                create_user = #{createUser,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by t.create_time desc ) a
+        ) b
+        where b.row_num between ${offset} and ${pageCount}
+    </select>
+
+    <select id="selectRoomCount" resultType="java.lang.Integer">
+        select count(1)
+        from
+		ygbx_video_call_room
+        <where>
+            <if test="createUser != null and createUser != ''">
+                create_user = #{createUser,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectRoomInfo" resultType="com.sinosig.suntrtc.entity.RoomInfo">
+				select
+			room_no as roomNo,
+			current_business_no as currentBusinessNo,
+			need_password as needPassword,
+			null as password,
+			status,
+			create_user as createUser,
+			create_source as createSource,
+			create_time as createTime,
+			update_time as updateTime
+		from
+			ygbx_video_call_room
+		where room_no = #{roomNo,jdbcType=VARCHAR}
+		and (password is null or password = #{password,jdbcType=VARCHAR})
+	</select>
+
+    <select id="selectVideoCallEventsByRoomNO" resultType="java.util.Map">
+		SELECT
+			a.BUSINESS_NO as businessNo,
+			a.EVENT_TYPE as eventType,
+			a.EVENT_OWNER as userName,
+			a.CREATE_TIME as createTime
+		FROM
+			ygbx_video_call_events a
+		LEFT JOIN ygbx_video_call_business b ON a.BUSINESS_NO = b.BUSINESS_NO
+		LEFT JOIN ygbx_video_call_room c ON  c.ROOM_NO = b.ROOM_NO
+		WHERE
+			c.ROOM_NO = #{roomNo}
+			AND a.EVENT_TYPE = #{eventType}
+			AND c.status = '有效'
+	</select>
+
+	<select id="selectOnlineByRoomNO" resultType="com.sinosig.suntrtc.entity.BusinessInfo">
+		SELECT
+			BUSINESS_NO AS businessNo,
+			ROOM_NO AS roomNo,
+			START_USER AS startUser,
+			START_SOURCE AS startSource,
+			START_TIME AS startTime,
+			DISMISS_OPERATOR AS dismissOperator
+		FROM
+			ygbx_video_call_business
+		WHERE
+			ROOM_NO = #{roomNo}
+	</select>
+
+    <insert id="createBusiness">
+		insert into
+			ygbx_video_call_business
+		  (
+		  	business_no,
+		  	room_no,
+		  	start_source,
+		  	start_user,
+		  	start_time,
+		  	end_time,
+		  	end_type,
+		  	dismiss_source,
+		  	dismiss_operator,
+		  	time_span,
+		  	create_time,
+		  	update_time
+		  )
+		  values
+		  (
+		  	#{businessNo,jdbcType=VARCHAR},
+		  	#{roomNo,jdbcType=VARCHAR},
+		  	#{startSource,jdbcType=VARCHAR},
+		  	#{startUser,jdbcType=VARCHAR},
+		  	NOW(),
+		  	null,
+		  	null,
+		  	null,
+		  	null,
+		  	null,
+		  	NOW(),
+		  	null
+		  )
+	</insert>
+
+    <update id="updateRoomInfo">
+		  update ygbx_video_call_room
+		  set
+		  	current_business_no = #{businessNo,jdbcType=VARCHAR},
+		  	update_time = NOW()
+		  where
+		  	room_no = #{roomNo,jdbcType=VARCHAR}
+	</update>
+
+    <select id="selectCurrentBusinessNo" resultType="java.lang.String">
+		select current_business_no from
+		ygbx_video_call_room where room_no = #{roomNo,jdbcType=VARCHAR}
+	</select>
+
+    <select id="selectvideoEvents" resultType="com.sinosig.suntrtc.entity.EventInfo">
+		SELECT
+			a.BUSINESS_NO as businessNo,
+			a.EVENT_TYPE as eventType,
+			a.EVENT_OWNER as eventOwner ,
+			a.EVENT_TIMESTAMP as eventTimestamp,
+			a.CREATE_TIME as createTime
+		FROM
+			ygbx_video_call_events a
+		LEFT JOIN ygbx_video_call_room b on a.BUSINESS_NO = b.CURRENT_BUSINESS_NO
+		WHERE
+			a.BUSINESS_NO = #{businessNo}
+			AND a.EVENT_TYPE = '进入房间' AND b.STATUS = '有效'
+	</select>
+
+    <insert id="insertBusinessEvent">
+		insert into
+			ygbx_video_call_events
+		(
+			id,
+			business_no,
+			event_type,
+			event_owner,
+			event_timestamp,
+			create_time,
+			update_time
+		)
+		values
+		(
+			UUID(),
+			#{businessNo,jdbcType=VARCHAR},
+			#{eventType,jdbcType=VARCHAR},
+			#{eventOwner,jdbcType=VARCHAR},
+			#{eventTimestamp,jdbcType=VARCHAR},
+			NOW(),
+			null
+		)
+	</insert>
+
+
+    <insert id="insertBusinessVideoInfo">
+		insert into
+			ygbx_video_call_video_info
+		(
+			id,
+			business_no,
+			user_name,
+			sur_name,
+			user_source,
+			stream_id,
+			video_path,
+			create_time,
+			update_time,
+			online_status,
+			SYSTEM_VERSION
+		)
+		values
+		(
+		     UUID(),
+			#{businessNo,jdbcType=VARCHAR},
+			#{username,jdbcType=VARCHAR},
+			#{surName,jdbcType=VARCHAR},
+			#{userSource,jdbcType=VARCHAR},
+			#{streamId,jdbcType=VARCHAR},
+			null,
+			NOW(),
+			null,
+			#{onlineStatus,jdbcType=VARCHAR},
+			#{systemVersion}
+		)
+	</insert>
+
+    <update id="updateBusinessCauseEndBusiness">
+        update ygbx_video_call_business
+        set
+        end_type = #{endType,jdbcType=VARCHAR},
+        <if test="dismissOperator != null and dismissOperator != ''">
+            dismiss_operator = #{dismissOperator,jdbcType=VARCHAR},
+        </if>
+        <if test="dismissSource != null and dismissSource != ''">
+            dismiss_source = #{dismissSource,jdbcType=VARCHAR},
+        </if>
+        end_time = NOW(),
+        time_span = TIME_TO_SEC(TIMEDIFF(`end_time`, `start_time`)),
+        update_time = NOW()
+        where business_no = #{businessNo,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectRoomInfoByBusinessNo" resultType="com.sinosig.suntrtc.entity.RoomInfo">
+        select
+        	room_no as roomNo,
+        	current_business_no as currentBusinessNo,
+			need_password as needPassword,
+			password as password,
+			status,
+			create_user as createUser,
+			create_source as createSource,
+			create_time as createTime,
+			update_time as updateTime
+		from
+			ygbx_video_call_room
+		where current_business_no = #{businessNo,jdbcType=VARCHAR}  and STATUS = '有效'
+    </select>
+
+    <select id="selectRoomInfoByRoomNo" resultType="com.sinosig.suntrtc.entity.RoomInfo">
+        select
+        	room_no as roomNo,
+        	current_business_no as currentBusinessNo,
+			need_password as needPassword,
+			password as password,
+			status,
+			create_user as createUser,
+			create_source as createSource,
+			create_time as createTime,
+			update_time as updateTime
+		from
+			ygbx_video_call_room
+		where room_no = #{roomNo,jdbcType=VARCHAR} and status ='有效'
+    </select>
+
+    <update id="updateRoomStatus">
+        update ygbx_video_call_room
+        set status = #{status}
+        where room_no = #{roomNo,jdbcType=VARCHAR}
+    </update>
+
+    <select id="passwordRequiredByRoomNo" resultType="java.lang.String">
+		SELECT need_password FROM ygbx_video_call_room WHERE room_no = #{roomNo}
+	</select>
+
+    <select id="queryRoomNoByOrderId" resultType="java.lang.String">
+	  select a.room_no as roomNo
+	  from ygbx_video_call_order_info a
+	  LEFT JOIN ygbx_video_call_room b on a.ROOM_NO = b.ROOM_NO
+	  where a.order_id = #{orderId,jdbcType=VARCHAR} and b.status = '有效'
+	</select>
+
+
+    <insert id="relatedCases">
+		insert into
+			ygbx_video_call_order_info
+		(
+			id,
+			order_id,
+			surveyor_name,
+			room_no,
+			create_user,
+			create_time,
+			update_time,
+			report_name,
+			phone,
+			licence_no,
+			damage_address,
+		    link,
+			estimateno
+		)
+		values
+		(
+           UUID(),
+           #{orderInfo.orderId,jdbcType=VARCHAR},
+           #{orderInfo.surveyorName,jdbcType=VARCHAR},
+           #{roomInfo.roomNo,jdbcType=VARCHAR},
+           #{roomInfo.createUser,jdbcType=VARCHAR},
+			NOW(),
+			null,
+			#{orderInfo.reportName,jdbcType=VARCHAR},
+			#{orderInfo.phone,jdbcType=VARCHAR},
+			#{orderInfo.licenceNo,jdbcType=VARCHAR},
+			#{orderInfo.damageAddress,jdbcType=VARCHAR},
+			#{orderInfo.link,jdbcType=VARCHAR},
+			#{orderInfo.estimateNo,jdbcType=VARCHAR}
+
+		)
+	</insert>
+
+
+    <update id="updateOrderInfo">
+        update ygbx_video_call_order_info
+        set surveyor_name = #{username,jdbcType=VARCHAR}
+        where order_id = #{orderId,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="selectSurveyorNoByRoomNo" resultType="java.lang.String">
+		SELECT surveyor_name FROM ygbx_video_call_order_info WHERE room_no = #{roomNo}
+	</select>
+
+	<select id="selectRoomUserByBussinesNo" resultType="com.sinosig.suntrtc.entity.RoomInfo">
+		SELECT * FROM ygbx_video_call_order_info WHERE room_no = #{roomNo}
+	</select>
+</mapper>

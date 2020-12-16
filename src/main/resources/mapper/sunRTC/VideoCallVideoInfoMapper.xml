@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinosig.suntrtc.dao.VideoCallVideoInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.sinosig.suntrtc.entity.VideoCallVideoInfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_source" property="userSource" jdbcType="VARCHAR" />
+    <result column="stream_id" property="streamId" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="video_path" property="videoPath" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="sur_name" property="surName" jdbcType="VARCHAR" />
+    <result column="system_version" property="systemVersion" jdbcType="VARCHAR" />
+    <result column="online_status" property="onlineStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, business_no, user_name, user_source, stream_id, file_id, video_path, create_time, 
+    update_time,sur_name,system_version,online_status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ygbx_video_call_video_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByBusinessNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+        <include refid="Base_Column_List" />
+    from ygbx_video_call_video_info
+    where BUSINESS_NO = #{businessNo,jdbcType=VARCHAR} and ONLINE_STATUS != '1'
+  </select>
+
+  <select id="selectByBusinessNoAndUserName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT
+        <include refid="Base_Column_List" />
+    FROM ygbx_video_call_video_info WHERE BUSINESS_NO = #{businessNo,jdbcType=VARCHAR} and USER_NAME like concat('%',#{userName},'%')  and ONLINE_STATUS = '0'
+  </select>
+
+
+
+
+  <select id="selectByStreamId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from ygbx_video_call_video_info
+    where stream_id = #{streamId,jdbcType=VARCHAR}
+      and video_path is null
+    order by create_time asc
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ygbx_video_call_video_info
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.sinosig.suntrtc.entity.VideoCallVideoInfo" >
+    insert into ygbx_video_call_video_info (id, business_no, user_name,
+      user_source, stream_id, file_id, 
+      video_path, create_time, update_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{businessNo,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{userSource,jdbcType=VARCHAR}, #{streamId,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
+      #{videoPath,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.sinosig.suntrtc.entity.VideoCallVideoInfo" >
+    insert into ygbx_video_call_video_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="businessNo != null" >
+        business_no,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userSource != null" >
+        user_source,
+      </if>
+      <if test="streamId != null" >
+        stream_id,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="videoPath != null" >
+        video_path,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="businessNo != null" >
+        #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSource != null" >
+        #{userSource,jdbcType=VARCHAR},
+      </if>
+      <if test="streamId != null" >
+        #{streamId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="videoPath != null" >
+        #{videoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinosig.suntrtc.entity.VideoCallVideoInfo" >
+    update ygbx_video_call_video_info
+    <set >
+      <if test="businessNo != null" >
+        business_no = #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSource != null" >
+        user_source = #{userSource,jdbcType=VARCHAR},
+      </if>
+      <if test="streamId != null" >
+        stream_id = #{streamId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="videoPath != null" >
+        video_path = #{videoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.sinosig.suntrtc.entity.VideoCallVideoInfo" >
+    update ygbx_video_call_video_info
+    set business_no = #{businessNo,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_source = #{userSource,jdbcType=VARCHAR},
+      stream_id = #{streamId,jdbcType=VARCHAR},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      video_path = #{videoPath,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateOnlineStatus" parameterType="java.lang.String">
+    update ygbx_video_call_video_info set  ONLINE_STATUS = '1' WHERE BUSINESS_NO = #{businessNo,jdbcType=VARCHAR} and  USER_NAME = #{userName,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

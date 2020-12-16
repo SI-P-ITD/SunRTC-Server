@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosig.suntrtc.dao.VideoTimeMapper">
+
+    <resultMap id="BaseResultMap" type="com.sinosig.suntrtc.entity.VideoTimeInfo">
+        <result column="ym_time" property="ymTime" jdbcType="VARCHAR"/>
+        <result column="cumulative_duration"  property="cumulativeDuration" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <update id="updateVideoTime">
+        UPDATE ygbx_video_time SET cumulative_duration = cumulative_duration + #{times,jdbcType=BIGINT} WHERE ym_time = #{month,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectVideoTime" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT ym_time,cumulative_duration FROM ygbx_video_time where ym_time = #{month,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertVideoTime" >
+        INSERT INTO ygbx_video_time (ym_time, cumulative_duration) VALUES (#{month,jdbcType=VARCHAR},#{times,jdbcType=BIGINT})
+    </insert>
+
+</mapper>

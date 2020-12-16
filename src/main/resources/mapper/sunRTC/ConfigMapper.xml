@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinosig.suntrtc.dao.ConfigDao">
+
+	<select id="getSDKParams" resultType="com.sinosig.suntrtc.entity.SDKParams">
+		   SELECT
+			plat_type as platType,
+			sdk_type as sdkType,
+			scene_type as sceneType,
+			ak,
+			sk,
+			app_id as appId,
+			secret_key as secretKey,
+			region
+		  from
+		  	ygbx_sdk_config
+		  where
+		  	sdk_type = #{sdkType}
+		  	and scene_type  like concat('%',#{sceneType},'%')
+	</select>
+
+</mapper>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinosig.suntrtc.dao.VideoCallBusinessMapper" >
+  <resultMap id="BaseResultMap" type="com.sinosig.suntrtc.entity.VideoCallBusiness" >
+    <id column="business_no" property="businessNo" jdbcType="VARCHAR" />
+    <result column="room_no" property="roomNo" jdbcType="VARCHAR" />
+    <result column="start_source" property="startSource" jdbcType="VARCHAR" />
+    <result column="start_user" property="startUser" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="end_type" property="endType" jdbcType="VARCHAR" />
+    <result column="dismiss_source" property="dismissSource" jdbcType="VARCHAR" />
+    <result column="dismiss_operator" property="dismissOperator" jdbcType="VARCHAR" />
+    <result column="time_span" property="timeSpan" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    business_no, room_no, start_source, start_user, start_time, end_time, end_type, dismiss_source, 
+    dismiss_operator, time_span, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ygbx_video_call_business
+    where business_no = #{businessNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ygbx_video_call_business
+    where business_no = #{businessNo,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sinosig.suntrtc.entity.VideoCallBusiness" >
+    insert into ygbx_video_call_business (business_no, room_no, start_source,
+      start_user, start_time, end_time, 
+      end_type, dismiss_source, dismiss_operator, 
+      time_span, create_time, update_time
+      )
+    values (#{businessNo,jdbcType=VARCHAR}, #{roomNo,jdbcType=VARCHAR}, #{startSource,jdbcType=VARCHAR}, 
+      #{startUser,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{endType,jdbcType=VARCHAR}, #{dismissSource,jdbcType=VARCHAR}, #{dismissOperator,jdbcType=VARCHAR}, 
+      #{timeSpan,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinosig.suntrtc.entity.VideoCallBusiness" >
+    insert into ygbx_video_call_business
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="businessNo != null" >
+        business_no,
+      </if>
+      <if test="roomNo != null" >
+        room_no,
+      </if>
+      <if test="startSource != null" >
+        start_source,
+      </if>
+      <if test="startUser != null" >
+        start_user,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="endType != null" >
+        end_type,
+      </if>
+      <if test="dismissSource != null" >
+        dismiss_source,
+      </if>
+      <if test="dismissOperator != null" >
+        dismiss_operator,
+      </if>
+      <if test="timeSpan != null" >
+        time_span,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="businessNo != null" >
+        #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="roomNo != null" >
+        #{roomNo,jdbcType=VARCHAR},
+      </if>
+      <if test="startSource != null" >
+        #{startSource,jdbcType=VARCHAR},
+      </if>
+      <if test="startUser != null" >
+        #{startUser,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endType != null" >
+        #{endType,jdbcType=VARCHAR},
+      </if>
+      <if test="dismissSource != null" >
+        #{dismissSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dismissOperator != null" >
+        #{dismissOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="timeSpan != null" >
+        #{timeSpan,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinosig.suntrtc.entity.VideoCallBusiness" >
+    update ygbx_video_call_business
+    <set >
+      <if test="roomNo != null" >
+        room_no = #{roomNo,jdbcType=VARCHAR},
+      </if>
+      <if test="startSource != null" >
+        start_source = #{startSource,jdbcType=VARCHAR},
+      </if>
+      <if test="startUser != null" >
+        start_user = #{startUser,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endType != null" >
+        end_type = #{endType,jdbcType=VARCHAR},
+      </if>
+      <if test="dismissSource != null" >
+        dismiss_source = #{dismissSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dismissOperator != null" >
+        dismiss_operator = #{dismissOperator,jdbcType=VARCHAR},
+      </if>
+      <if test="timeSpan != null" >
+        time_span = #{timeSpan,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where business_no = #{businessNo,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinosig.suntrtc.entity.VideoCallBusiness" >
+    update ygbx_video_call_business
+    set room_no = #{roomNo,jdbcType=VARCHAR},
+      start_source = #{startSource,jdbcType=VARCHAR},
+      start_user = #{startUser,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      end_type = #{endType,jdbcType=VARCHAR},
+      dismiss_source = #{dismissSource,jdbcType=VARCHAR},
+      dismiss_operator = #{dismissOperator,jdbcType=VARCHAR},
+      time_span = #{timeSpan,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where business_no = #{businessNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

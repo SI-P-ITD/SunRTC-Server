@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinosig.suntrtc.dao.PictureInfoDao">
+
+	<insert id="insertPictureInfo">
+		insert into
+		ygbx_video_call_picture
+			(
+			id,
+			business_no,
+			picture_timestamp,
+			picture_path,
+			picture_length,
+			picture_size,
+			picture_format,
+			picture_source,
+			picture_producer,
+			picture_operator,
+			create_time,
+			update_time
+			)
+		  values
+		  	(
+		  	UUID(),
+			#{businessNo,jdbcType=VARCHAR},
+			#{pictureTimeStamp,jdbcType=VARCHAR},
+			#{picturePath,jdbcType=VARCHAR},
+			#{pictureLength,jdbcType=VARCHAR},
+			#{pictureSize,jdbcType=VARCHAR},
+			#{pictureFormat,jdbcType=VARCHAR},
+			#{pictureSource,jdbcType=VARCHAR},
+			#{pictureProducer,jdbcType=VARCHAR},
+			#{pictureOperator,jdbcType=VARCHAR},
+			NOW(),
+			null
+		  	)
+	</insert>
+
+	<select id="getlistPicture" resultType="java.lang.String">
+		SELECT  PICTURE_PATH as PICTUREPATH from  ygbx_video_call_picture WHERE BUSINESS_NO = #{businessNo} ORDER BY CREATE_TIME desc
+	</select>
+</mapper>

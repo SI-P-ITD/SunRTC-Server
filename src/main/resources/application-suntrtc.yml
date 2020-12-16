@@ -1,0 +1,50 @@
+#mysql数据源相关配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      maxActive: 30      #最大连接池数
+      initialSize: 1     #初始连接池数
+      minIdle: 1         #最小连接池数
+      maxWait: 60000     #(生产要调整)获取连接等待超时时间 配置了maxWait之后，缺省启用公平锁，并发效率会有所下降，如果需要可以通过配置useUnfairLock属性为true使用非公平锁
+      url: jdbc:mysql://127.0.0.1:3306/suntrtcdb?useUnicode=true
+      username: suntrtc
+      password: Druid密码
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      timeBetweenEvictionRunsMillis: 60000  #配置间隔多久才进行一次检测
+      minEvictableIdleTimeMillis: 300000    #配置一个连接在池中最小生存的时间
+      #validationQuery: select 'x'
+      validationQuery: select 1 from dual   #用来检测连接是否有效的sql
+      testWhileIdle: true  #建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      testOnBorrow: true  #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      testOnReturn: false  #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      poolPreparedStatements: true #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭
+      maxPoolPreparedStatementPerConnectionSize: 100  #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true
+      #maxOpenPreparedStatements: 100  #同maxPoolPreparedStatementPerConnectionSize
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,slf4j,config   #常用的插件有：监控统计用的filter:stat,日志用的filter:log4j,防御sql注入的filter:wall
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=3000;config.decrypt=true;config.decrypt.key=Druid公钥
+      stat-view-servlet:
+        urlPattern: "/druid/*"
+        enabled: true
+
+#redis配置信息(哨兵模式)
+redis:
+  database: 1
+  master:
+    name: mymaster
+  sentinel:
+    address: 127.0.0.1:20001/127.0.0.1:20002
+  auth: redis秘钥
+
+
+#IM账号信息
+sdk-type:
+  platType: tencent
+  ak: IM ak
+  sk: IM sk
+  secretKey: IM secretKey
+  appId:  IM appId
+
+
